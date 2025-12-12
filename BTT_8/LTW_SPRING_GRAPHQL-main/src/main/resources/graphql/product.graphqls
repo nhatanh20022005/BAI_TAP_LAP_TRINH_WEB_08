@@ -1,0 +1,40 @@
+# INPUT
+input ProductInput {
+    title: String!
+    quantity: Int
+    description: String
+    price: Float!
+    userId: ID!
+}
+
+# TYPE
+type Product {
+    id: ID!
+    title: String!
+    quantity: Int
+    description: String
+    price: Float!
+    user: User!
+}
+
+# ROOT QUERY DEFINITION
+# Đây là nơi bạn định nghĩa các Query chính và các Query nghiệp vụ
+type Query {
+    # Yêu cầu 2: Hiển thị tất cả product có price từ thấp đến cao
+    allProductsByPriceAsc: [Product!]!
+
+    # Yêu cầu 2: Lấy tất cả product của 01 category
+    productsByCategoryId(categoryId: ID!): [Product!]!
+
+    # CRUD Product
+    findAllProducts: [Product!]!
+    findProductById(id: ID!): Product
+}
+
+# ROOT MUTATION DEFINITION
+type Mutation {
+    # CRUD Product
+    createProduct(product: ProductInput!): Product!
+    updateProduct(id: ID!, product: ProductInput!): Product!
+    deleteProduct(id: ID!): Product
+}

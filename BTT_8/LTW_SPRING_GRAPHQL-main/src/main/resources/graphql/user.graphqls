@@ -1,0 +1,31 @@
+# INPUT
+input UserInput {
+    fullName: String!
+    email: String!
+    password: String!
+    phone: String
+    categoryIds: [ID!]
+}
+
+# TYPE
+type User {
+    id: ID!
+    fullName: String!
+    email: String!
+    phone: String
+    # fields "categories" và "products" sẽ được resolve tự động
+    categories: [Category] 
+    products: [Product]
+}
+
+# EXTEND Query và Mutation
+extend type Query {
+    findAllUsers: [User!]!
+    findUserById(id: ID!): User
+}
+
+extend type Mutation {
+    createUser(user: UserInput!): User!
+    updateUser(id: ID!, user: UserInput!): User!
+    deleteUser(id: ID!): User
+}

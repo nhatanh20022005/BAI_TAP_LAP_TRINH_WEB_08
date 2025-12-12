@@ -1,0 +1,53 @@
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* Nền gradient nhẹ nhàng */
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1100px;
+}
+
+.header-card {
+    background: linear-gradient(45deg, #1e3c72, #2a5298); /* Gradient màu xanh đậm */
+    color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+}
+
+.section-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.price-col {
+    font-weight: 700;
+    color: #ff6f61; /* Màu san hô đỏ */
+    font-size: 1.15em;
+}
+
+.btn-action {
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.table-custom tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>GraphQL Products Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/styles.css}">
+</head>
+<body class="container py-5">
+    
+    <div class="header-card mb-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="display-6 fw-bold m-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-diagram-3 me-2" viewBox="0 0 16 16">
+                    <path d="M6 3.5A1.5 1.5 0 0 1 7.5 2h1A1.5 1.5 0 0 1 10 3.5v1A1.5 1.5 0 0 1 8.5 6v1H14a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0V8h-5v.5a.5.5 0 0 1-1 0v-1A.5.5 0 0 1 2 7h5.5V6A1.5 1.5 0 0 1 6 4.5zM8.5 5A.5.5 0 0 0 8 4.5v-1A.5.5 0 0 0 7.5 3h-1A.5.5 0 0 0 6 3.5v1A.5.5 0 0 0 6.5 5h1z"/>
+                </svg>
+                GraphQL Product Management
+            </h1>
+            <span class="badge bg-light text-primary fs-6 py-2 px-3">WEBPR330479</span>
+        </div>
+        <p class="lead mt-2 mb-0 text-white-75">Sử dụng GraphQL và AJAX để thao tác và hiển thị dữ liệu sản phẩm.</p>
+    </div>
+
+    <div class="section-card mb-5">
+        <h4 class="mb-3 text-primary">Thao tác Nhanh</h4>
+        <div class="d-flex flex-wrap gap-3">
+            <a href="http://localhost:8081/graphiql" target="_blank" class="btn btn-action btn-info text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tools me-1" viewBox="0 0 16 16">
+                    <path d="M1 0L0 1v3.5l1.042.834L0 6.5v3.5l1.042.834L0 11.5v3.5l1.042.834L0 15v1h1l.042-.834L2 14.5V11l1.042-.834L2 9.5V6l1.042-.834L2 4.5V1.5l1.042-.834L2 0zM14 0l-1.042-.834L12 1.5V4l-1.042.834L12 6V9.5l-1.042.834L12 11V14.5l-1.042.834L12 16h1l-.042-.834L14 14.5V11l1.042-.834L14 9.5V6l1.042-.834L14 4.5V1.5l1.042-.834L14 0z"/>
+                </svg>
+                Mở GraphiQL Tool
+            </a>
+
+            <a href="http://localhost:8081/graphiql" target="_blank" class="btn btn-action btn-success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-fill me-1" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M15.55 3.565A.5.5 0 0 1 16 4v8a.5.5 0 0 1-.55.5h-15A.5.5 0 0 1 0 12V4a.5.5 0 0 1 .55-.5h15zM12.5 1h-9a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1z"/>
+                </svg>
+                Tạo Product Mới
+            </a>
+            
+            <a href="http://localhost:8081/graphiql" target="_blank" class="btn btn-action btn-outline-secondary">
+                Quản lý User & Category (CRUD)
+            </a>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h4 class="mb-3 text-secondary">Bảng dữ liệu: Sản phẩm Sắp xếp theo Giá</h4>
+        
+        <div id="loading" class="alert alert-primary d-flex align-items-center">
+            <div class="spinner-border text-primary spinner-border-sm me-2" role="status"></div>
+            <strong>Đang tải...</strong> Gửi Query <code>allProductsByPriceAsc</code> đến GraphQL API.
+        </div>
+        
+        <table class="table table-hover table-custom d-none" id="product-table">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Tên Sản phẩm</th>
+                    <th class="text-end">Giá (VNĐ)</th>
+                    <th>Người bán</th>
+                </tr>
+            </thead>
+            <tbody id="product-list-body">
+            </tbody>
+        </table>
+        
+        <div id="error" class="alert alert-danger d-flex align-items-center d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.984.997l.007.031V8a1 1 0 0 1-2 0V6.028l.007-.031C7.046 5.462 7.465 5 8 5zm0 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+            <div>
+                <strong>Lỗi Truy vấn!</strong> Vui lòng kiểm tra console (F12) và đảm bảo Backend đã chạy đúng.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchProductsByPriceAsc();
+        });
+
+        async function fetchProductsByPriceAsc() {
+            const endpoint = '/apis/graphql'; 
+            
+            const graphqlQuery = {
+                query: `
+                    query GetProducts {
+                        allProductsByPriceAsc {
+                            id
+                            title
+                            price
+                            user {
+                                fullName
+                            }
+                        }
+                    }
+                `
+            };
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify(graphqlQuery)
+                });
+
+                const result = await response.json();
+                document.getElementById('loading').classList.add('d-none');
+                
+                if (result.errors) {
+                    console.error("GraphQL Errors:", result.errors);
+                    document.getElementById('error').classList.remove('d-none');
+                    return;
+                }
+
+                const products = result.data.allProductsByPriceAsc;
+                const tbody = document.getElementById('product-list-body');
+
+                // Helper function to format currency
+                const formatter = new Intl.NumberFormat('vi-VN');
+
+                if (products.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted p-4">Không tìm thấy sản phẩm nào. Hãy tạo thử trong GraphiQL.</td></tr>';
+                } else {
+                    products.forEach(product => {
+                        const row = tbody.insertRow();
+                        row.insertCell(0).textContent = product.id;
+                        row.insertCell(1).textContent = product.title;
+                        
+                        const priceCell = row.insertCell(2);
+                        priceCell.textContent = formatter.format(product.price) + ' VNĐ';
+                        priceCell.classList.add('text-end', 'price-col'); 
+                        
+                        row.insertCell(3).textContent = product.user ? product.user.fullName : 'N/A';
+                    });
+                }
+                document.getElementById('product-table').classList.remove('d-none');
+
+            } catch (error) {
+                document.getElementById('loading').classList.add('d-none');
+                document.getElementById('error').classList.remove('d-none');
+                console.error("Error fetching data:", error);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# INPUT
+input CategoryInput {
+    name: String!
+    images: String
+}
+
+# TYPE
+type Category {
+    id: ID!
+    name: String!
+    images: String
+    # fields "users" sẽ được resolve tự động thông qua JPA
+    users: [User] 
+}
+
+# EXTEND Query: Thêm các trường Query của Category vào gốc Query chung
+extend type Query {
+    findAllCategories: [Category!]!
+    findCategoryById(id: ID!): Category
+}
+
+# EXTEND Mutation: Thêm các trường Mutation của Category vào gốc Mutation chung
+extend type Mutation {
+    createCategory(category: CategoryInput!): Category!
+    updateCategory(id: ID!, category: CategoryInput!): Category!
+    deleteCategory(id: ID!): Category
+}
